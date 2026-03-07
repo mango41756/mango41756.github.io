@@ -1,10 +1,18 @@
-<html>
-  <head>
-    <title> hi guys </title>
-  </head>
-  <body>
-  <button> is this a button </button>
-  <h1>hi guys</h1>
-  <p> hi guys </p>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> click counter </title>
+        <script>
+            var x
+            x = 0
+            function textchange() {
+                document.getElementById('text').innerHTML = x+=1;
+            }
+        </script>
+    </head>
+    <body>
+        <h1> click </h1>
+        <button type="button" onclick="textchange()"> button </button>
+        <p>Clicks: <span id="text">0</span></p>
+    </body>
 </html>
