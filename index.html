@@ -3,16 +3,76 @@
     <head>
         <title> click counter </title>
         <script>
-            var x
-            x = 0
-            function textchange() {
-                document.getElementById('text').innerHTML = x+=1;
+            let clicks = 0
+            let clickpower = 1
+            let clickmult = 1
+            let playtime = 0
+            let multupgbought = false
+
+            function clickcounterupdate() {
+                document.getElementById("text").textContent = clicks;
             }
+            
+            function clickcounterclick() {
+                clicks+=clickpower*clickmult
+                document.getElementById('text').textContent = clicks;
+            }
+
+            function textpos(x, y, id) {
+                let p = document.getElementById(id);
+                p.style.left = x + "px"
+                p.style.top = y + "px"
+                p.style.position = "absolute"
+            }
+            
+            function buyClickPower() {
+                if (clicks >= 100) {
+                    clicks -= 100
+                    clickpower += 1
+                    clickcounterupdate()
+                    document.getElementById("ClickPCounter").textContent = clickpower;
+                }
+                else {
+                    alert("Not enough clicks");
+                }
+            }
+
+            function buyClickMult() {
+                if (multupgbought == false) {
+                    if (clicks >= 1000) {
+                        multupgbought = true
+                        clickmult += 1
+                        clicks -= 1000
+                        clickcounterupdate()
+                        document.getElementById("ClickMultCounter").textContent = clickmult-1;
+                        alert("Bought the click multiplier upgrade")
+                    }
+                }
+            }
+
+            setInterval(function() {
+                  playtime+=1;
+                  document.getElementById("PlaytimeCounter").textContent = playtime;
+                }, 1000);
+
+            window.onload = function() {
+                textpos(200, 90, "ClickP");
+                textpos(200, 110, "ClickPCounterPos")
+                textpos(500, 90, "ClickMult");
+                textpos(500, 110, "ClickMultPos")
+            };
+
         </script>
     </head>
     <body>
-        <h1> click </h1>
-        <button type="button" onclick="textchange()"> button </button>
+        <h1> clicker </h1>
+        <button type="button" onclick="clickcounterclick()"> button </button>
         <p>Clicks: <span id="text">0</span></p>
+        <p id="ClickPCounterPos">Click Power: <span id="ClickPCounter">1</span></p>
+        <button id="ClickP" onclick="buyClickPower()"> Buy 1 Click power for 100 clicks </button>
+        <button id="ClickMult" onclick="buyClickMult()"> Buy 1 Click Multiplier for 1000 clicks</button>
+        <p id="ClickMultPos">Click Multiplier: <span id="ClickMultCounter">0</span>/1</p>
+        <p> Current Playtime: <span id="PlaytimeCounter">0</span></p>
+
     </body>
 </html>
