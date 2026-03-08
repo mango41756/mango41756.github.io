@@ -2,12 +2,14 @@
 <html lang="en">
     <head>
         <title> click counter </title>
+        <bgcolor></bgcolor>
         <script>
-            let clicks = 0
+            let clicks = 10000
             let clickpower = 1
             let clickmult = 1
             let playtime = 0
             let multupgbought = false
+            let autoclickerbought = false
 
             function clickcounterupdate() {
                 document.getElementById("text").textContent = clicks;
@@ -44,35 +46,69 @@
                         clickmult += 1
                         clicks -= 1000
                         clickcounterupdate()
-                        document.getElementById("ClickMultCounter").textContent = clickmult-1;
+                        document.getElementById("ClickMultCounter").textContent = 1;
                         alert("Bought the click multiplier upgrade")
+                    } else {
+                        alert("Not enough clicks")
                     }
+                } else {
+                    alert("You already bought this upgrade")
+                }
+                
+            }
+
+            function buyAC() {
+                if (autoclickerbought == false) {
+                    if (clicks >= 500) {
+                        autoclickerbought = true
+                        clicks -= 500
+                        clickcounterupdate()
+                        alert("Bought the autoclicker upgrade")
+                        document.getElementById("AutoClickerCounter").textContent = 1;
+                    } else {
+                        alert("Not enough clicks")
+                    }
+
+
+                } else {
+                    alert("You already bought this upgrade")
                 }
             }
 
             setInterval(function() {
                   playtime+=1;
                   document.getElementById("PlaytimeCounter").textContent = playtime;
+
+                  if (autoclickerbought == true) {
+                    clickcounterclick()
+                    clickcounterupdate()
+                  }
+
                 }, 1000);
 
             window.onload = function() {
                 textpos(200, 90, "ClickP");
-                textpos(200, 110, "ClickPCounterPos")
-                textpos(500, 90, "ClickMult");
-                textpos(500, 110, "ClickMultPos")
+                textpos(200, 110, "ClickPCounterPos");
+                textpos(7, 300, "ClickMult");
+                textpos(7, 310, "ClickMultPos");
+                textpos(7, 370, "AutoClick");
+                textpos(7, 380, "AutoClickPos")
             };
 
         </script>
     </head>
-    <body>
-        <h1> clicker </h1>
+    <body style="background-color: #1e2729;">
+        <h1 style="color: white;"> Clicker </h1>
         <button type="button" onclick="clickcounterclick()"> button </button>
-        <p>Clicks: <span id="text">0</span></p>
-        <p id="ClickPCounterPos">Click Power: <span id="ClickPCounter">1</span></p>
+        <p style="color: white;">Clicks: <span id="text">0</span></p>
+        <p id="ClickPCounterPos" style="color: white;">Click Power: <span id="ClickPCounter">1</span></p>
         <button id="ClickP" onclick="buyClickPower()"> Buy 1 Click power for 100 clicks </button>
         <button id="ClickMult" onclick="buyClickMult()"> Buy 1 Click Multiplier for 1000 clicks</button>
-        <p id="ClickMultPos">Click Multiplier: <span id="ClickMultCounter">0</span>/1</p>
-        <p> Current Playtime: <span id="PlaytimeCounter">0</span></p>
-
+        <p id="ClickMultPos" style="color: white;">Click Multiplier: <span id="ClickMultCounter">0</span>/1</p>
+        <p style="color: white;"> Current Playtime: <span id="PlaytimeCounter">0</span></p>
+        <hr>
+        <h1 style="color: white;">One time purchase Upgrades</h1>
+        <p id="AutoClickPos" style="color: white;">You have <span id="AutoClickerCounter">0</span>/1 Autoclickers</p>
+        <button id="AutoClick" onclick="buyAC()"> Buy an autoclicker </button>
     </body>
 </html>
