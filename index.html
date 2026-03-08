@@ -12,12 +12,12 @@
             let autoclickerbought = false
 
             function clickcounterupdate() {
-                document.getElementById("text").textContent = clicks;
+                document.getElementById("text").textContent = formatNumber(clicks);
             }
             
             function clickcounterclick() {
                 clicks+=clickpower*clickmult
-                document.getElementById('text').textContent = clicks;
+                clickcounterupdate()
             }
 
             function textpos(x, y, id) {
@@ -74,6 +74,19 @@
                     alert("You already bought this upgrade")
                 }
             }
+
+            function formatNumber(num) {
+                if (num >= 1000000000) {
+                    return (num / 1000000000).toFixed(1).replace(".0","") + "B";
+                }
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1).replace(".0","") + "M";
+                }
+                if (num >= 1000) {
+                    return (num / 1000).toFixed(1).replace(".0","") + "K";
+                }
+                return num;
+}
 
             setInterval(function() {
                   playtime+=1;
