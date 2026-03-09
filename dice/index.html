@@ -5,7 +5,7 @@
     <script>
       function getRandomInt(max) {
         let dice = Math.floor(Math.random() * max);
-        document.getElementById("number").textContent = dice;
+        document.getElementById("number").textContent = dice+1;
       }
       
     </script>
@@ -14,6 +14,6 @@
   <body>
     <button onclick="getRandomInt(6)">dice</button>
     <p>The rolled number is <span id="number"></span></p>
-    <P>version 4</P>
+    <P>version 5</P>
   </body>
 </html>
