@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dice</title>
+    <script>
+      function dice() {
+        let dicenumber = Math.random(1,6);
+        document.getElementById("number").textContent = dicenumber; 
+      }
+    </script>
+    
+  </head>
+  <body>
+    <button onclick="dice()">dice</button>
+    <p>The rolled number is <span id="number"></span></p>
+  </body>
+</html>
