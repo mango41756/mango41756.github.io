@@ -4,15 +4,16 @@
     <title>dice</title>
     <script>
       function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
+        let dice = Math.floor(Math.random() * max);
+        document.getElementById("button").textContent = dice;
       }
       
     </script>
     
   </head>
   <body>
-    <button onclick="getRandomInt(6)">dice</button>
+    <button onclick="getRandomInt(6)" id="button">dice</button>
     <p>The rolled number is <span id="number"></span></p>
-    <P>version 2/P>
+    <P>version 3</P>
   </body>
 </html>
