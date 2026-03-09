@@ -3,12 +3,20 @@
     <head>
         <title> click counter </title>
         <script>
-            var clicks = 0;
-            var clickpower = 1;
-            var clickmult = 1;
-            var playtime = 0;
-            var multupgbought = false;
-            var autoclickerbought = false;
+            const game = {
+                clicks: 0,
+                clickpower: 0,
+                clickmult: 0,
+                playtime: 0,
+                multupgbought: false,
+                autoclickerbought: false
+            }
+
+            const upgs = {
+                ClickPowerUPG: { cost: 100, currency: "clicks", max: 100, scaling: 1.05, id: "ClickPCounter", variable: "clickpower", amount: 0, reward: game.clickpower+=1, buttonid: "ClickPButton"},
+                ClickMultUPG: { cost: 1000, currency: "clicks", max: 1, id: "ClickMultCounter", variable: "clickmult", amount: 0, reward: game.clickmult+=1, onetimepurchase: true, boolean: "multupgbought"},
+                AutoClickUPG: { cost: 500, currency: "clicks", max: 1, id: "AutoClickerCounter", amount: 0, onetimepurchase: true, boolean: "autoclickerbought"},
+            }
 
 
             function elementid(id) {
@@ -17,12 +25,37 @@
             }
 
             function clickcounterupdate() {
-                elementid("text").textContent = formatNumber(clicks);
+                elementid("text").textContent = formatNumber(game.clicks);
             }
             
             function clickcounterclick() {
-                clicks+=clickpower*clickmult;
+                game.clicks+=game.clickpower*game.clickmult;
                 clickcounterupdate();
+            }
+            function buyupg(upgrade) {
+                let upg = upgs[upgrade];
+                if (upg.amount >= upg.max) return;
+                if (game[upg.currency] >= upg.cost) {
+                    game[upg.currency] -= upg.cost;
+                    if (upg.scaling) {
+                        upg.cost *= upg.scaling;
+                    }
+                    if (upg.variable) {
+                        game[upg.variable] += upg.reward;
+                    }
+                    upg.amount += 1;
+                    upg.cost = Math.round(upg.cost)
+                    if (upg.buttonid) {
+                        elementid(upg.buttonid).textContent = upg.cost;
+                    }
+                    elementid(upg.id).textContent = upg.amount;
+                    clickcounterclick();
+                    if (upg.onetimepurchase) {
+                        game[upg.boolean] = true
+                    }
+                } else {
+                    alert("Not enough clicks")
+                }
             }
 
             function textpos(x, y, id) {
@@ -30,33 +63,6 @@
                 p.style.left = x + "px";
                 p.style.top = y + "px";
                 p.style.position = "absolute";
-            }
-            
-            function buy(cost, reward, type, id) {
-                if (clicks >= cost) {
-                    window[type] += reward;
-                    clicks -= cost;
-                    elementid(id).textContent = formatNumber(window[type]);
-                    clickcounterupdate()
-                } else {
-                    alert("Not enough clicks");
-                }
-
-            }
-
-            function buyupg(cost, reward, type, id, variable) {
-                if (window[variable] == false) {
-                    if (clicks >= cost) {
-                        window[variable] = true;
-                        window[type] = (window[type] || 0) + reward;
-                        elementid(id).textContent = 1
-                        clickcounterupdate()
-                    } else {
-                        alert("Not enough clicks")
-                    }
-                } else {
-                    alert("You already bought this upgrade")
-                }
             }
 
             function formatNumber(num) {
@@ -73,10 +79,10 @@
 }
 
             setInterval(function() {
-                  playtime+=1;
-                  document.getElementById("PlaytimeCounter").textContent = playtime;
+                  game.playtime+=1;
+                  elementid("PlaytimeCounter").textContent = game.playtime;
 
-                  if (autoclickerbought) {
+                  if (game.autoclickerbought) {
                     clickcounterclick();
                     clickcounterupdate();
                   }
@@ -90,6 +96,8 @@
                 textpos(7, 310, "ClickMultPos");
                 textpos(7, 370, "AutoClick");
                 textpos(7, 380, "AutoClickPos");
+                textpos(7, 550, "Version");
+                textpos(125, 550, "Discord");
             };
 
         </script>
@@ -98,14 +106,16 @@
         <h1 style="color: white;"> Clicker </h1>
         <button type="button" onclick="clickcounterclick()"> button </button>
         <p style="color: white;">Clicks: <span id="text">0</span></p>
-        <p id="ClickPCounterPos" style="color: white;">Click Power: <span id="ClickPCounter">1</span></p>
-        <button id="ClickP" onclick="buy(100, 1, 'clickpower', `ClickPCounter`)"> Buy 1 Click power for 100 clicks </button>
-        <button id="ClickMult" onclick="buyupg(1000, 1, 'clickmult', 'ClickMultCounter', 'multupgbought')"> Buy 1 Click Multiplier for 1000 clicks</button>
+        <p id="ClickPCounterPos" style="color: white;">Click Power: <span id="ClickPCounter">0</span>/100</p>
+        <button id="ClickP" onclick="buyupg('ClickPowerUPG')"> Buy 1 Click power for <span id="ClickPButton">100</span> clicks </button>
+        <button id="ClickMult" onclick="buyupg('ClickMultUPG')"> Buy 1 Click Multiplier for 1000 clicks</button>
         <p id="ClickMultPos" style="color: white;">Click Multiplier: <span id="ClickMultCounter">0</span>/1</p>
         <p style="color: white;"> Current Playtime: <span id="PlaytimeCounter">0</span></p>
         <hr>
         <h1 style="color: white;">One time purchase Upgrades</h1>
         <p id="AutoClickPos" style="color: white;">You have <span id="AutoClickerCounter">0</span>/1 Autoclickers</p>
-        <button id="AutoClick" onclick="buyupg(500, 1, null, 'AutoClickerCounter', 'autoclickerbought')"> Buy an autoclicker </button>
+        <button id="AutoClick" onclick="buyupg('AutoClickUPG')"> Buy an autoclicker for 500 clicks</button>
+        <p style="color: white" id="Version"> Version 1.2V</p>
+        <p style="color: white" id="Discord">https://discord.gg/rD3AYJAxpW</p>
     </body>
 </html>
